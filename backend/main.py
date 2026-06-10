@@ -43,9 +43,18 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
                 content={"detail": "Not found."},
             )
     # For non-path validation errors, return standard 422
+    # Sanitize errors to ensure JSON serializability (Pydantic v2 ctx may contain non-serializable objects)
+    sanitized_errors = []
+    for error in exc.errors():
+        sanitized = {
+            "loc": error.get("loc"),
+            "msg": error.get("msg"),
+            "type": error.get("type"),
+        }
+        sanitized_errors.append(sanitized)
     return JSONResponse(
         status_code=422,
-        content={"detail": exc.errors()},
+        content={"detail": sanitized_errors},
     )
 
 
