@@ -4,6 +4,7 @@ import ItemList from "./components/ItemList";
 import ItemDetail from "./components/ItemDetail";
 import ItemForm from "./components/ItemForm";
 import EditItemPage from "./pages/EditItemPage";
+import "./App.css";
 
 function App() {
   return (

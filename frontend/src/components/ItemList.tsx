@@ -23,32 +23,35 @@ export default function ItemList() {
   }, []);
 
   if (loading) {
-    return <p>Loading items…</p>;
+    return <div className="page"><p className="loading">Loading items…</p></div>;
   }
 
   if (error) {
-    return <p role="alert">{error}</p>;
+    return <div className="page"><p role="alert" className="form-api-error">{error}</p></div>;
   }
 
   if (items.length === 0) {
     return (
-      <div>
+      <div className="page empty-state">
         <p>No items available.</p>
-        <Link to="/items/new">Create Item</Link>
+        <Link to="/items/new" className="btn btn-primary">Create Item</Link>
       </div>
     );
   }
 
   return (
-    <div>
-      <h1>Items</h1>
-      <Link to="/items/new">Create Item</Link>
-      <ul>
+    <div className="page">
+      <div className="item-list-header">
+        <h1>Items</h1>
+        <Link to="/items/new" className="btn btn-primary">+ Create Item</Link>
+      </div>
+      <ul className="item-grid">
         {items.map((item) => (
-          <li key={item.id}>
+          <li key={item.id} className="item-card">
             <Link to={`/items/${item.id}`}>
-              {item.name} — {item.group}
+              {item.name}
             </Link>
+            <span className="item-badge">{item.group}</span>
           </li>
         ))}
       </ul>

@@ -32,15 +32,15 @@ function EditItemPage() {
   }, [id]);
 
   if (loading) {
-    return <p>Loading item...</p>;
+    return <div className="page"><p className="loading">Loading item...</p></div>;
   }
 
   if (error) {
-    return <p role="alert">Error: {error}</p>;
+    return <div className="page"><p role="alert" className="form-api-error">Error: {error}</p></div>;
   }
 
   if (!item) {
-    return <p>Item not found.</p>;
+    return <div className="page"><p>Item not found.</p></div>;
   }
 
   return <ItemForm mode="edit" item={item} itemId={item.id} />;

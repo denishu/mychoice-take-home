@@ -46,14 +46,14 @@ export default function ItemDetail() {
   }, [id]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <div className="page"><p className="loading">Loading...</p></div>;
   }
 
   if (error) {
     return (
-      <div>
-        <p>{error}</p>
-        <Link to="/">Back to list</Link>
+      <div className="page">
+        <p className="form-api-error">{error}</p>
+        <Link to="/" className="link">← Back to list</Link>
       </div>
     );
   }
@@ -63,20 +63,20 @@ export default function ItemDetail() {
   }
 
   return (
-    <div>
+    <div className="page item-detail">
       <h1>{item.name}</h1>
-      <dl>
-        <dt>Group</dt>
-        <dd>{item.group}</dd>
-        <dt>Created</dt>
-        <dd>{new Date(item.created_at).toLocaleString()}</dd>
-        <dt>Updated</dt>
-        <dd>{new Date(item.updated_at).toLocaleString()}</dd>
-      </dl>
-      <nav>
-        <Link to={`/items/${item.id}/edit`}>Edit</Link>
-        {" | "}
-        <Link to="/">Back to list</Link>
+      <span className="item-badge">{item.group}</span>
+      <div className="item-meta">
+        <dl>
+          <dt>Created</dt>
+          <dd>{new Date(item.created_at).toLocaleString()}</dd>
+          <dt>Updated</dt>
+          <dd>{new Date(item.updated_at).toLocaleString()}</dd>
+        </dl>
+      </div>
+      <nav className="item-detail-nav">
+        <Link to={`/items/${item.id}/edit`} className="btn btn-primary">Edit</Link>
+        <Link to="/" className="btn btn-secondary">← Back to list</Link>
       </nav>
     </div>
   );

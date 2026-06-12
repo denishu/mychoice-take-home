@@ -1,42 +1,79 @@
-# mychoice-take-home
+# Items CRUD App
 
-Full-Stack Coding Task: Django API + React App
-Task Overview
-You’ll be building a small API in Django that supports basic CRUD operations and a single-page React app that communicates with the API. The task will help assess your understanding of both Django backend development and React frontend development.
+A full-stack CRUD application for managing items, built with **FastAPI** (backend) and **React + TypeScript** (frontend).
 
-Part 1: Django API (Backend)
-Objective: Create a simple Django app with a REST API to manage a collection of "items".
+## Project Structure
 
-1. Data:
-An item entity should have at least the following fields
-name: Name of the item.
-group: Item group.
-created_at: Timestamp for when the item was created.
-updated_at: Timestamp for when the item was last updated.
-2. API Endpoints:
-Create the following endpoints:
+```
+├── backend/        # FastAPI + SQLAlchemy + Pydantic
+├── frontend/       # React + TypeScript + Vite
+└── README.md
+```
 
-GET /items/: List all items.
-POST /items/: Create a new item.
-PATCH /items/{id}/: Update an existing item.
-GET /items/{id}/: Get a specific item by its ID.
-Any library or framework can be used to help build the API endpoints (such as Django Rest Framework).
+## Prerequisites
 
-3. Additional rules to adhere to:
-There should be at least two item groups: Primary and Secondary.
-Each group should contain only unique item names. For example, an item named 'Rock' can appear in both the Primary and Secondary groups, but there can't be two items named 'Rock' in the same group (e.g., in the Primary group).
-4. Error Handling:
-Return appropriate HTTP status codes for success and failure (e.g., 404 for "not found", 400 for "bad request", etc.).
-Part 2: React App (Frontend)
-Objective: Create a small React app that communicates with the Django API and allows users to interact with the items.
+- Python 3.11+
+- Node.js 18+
+- npm
 
-1. App Structure:
-Build a small app to interact with the API. You can choose the structure and methods for managing state, making HTTP requests, and organizing components. Utilize all endpoints and build the following functionality - list items, create new item, review single item, update existing item.
-2. Design:
-Feel free to use any UI framework (such as Chakra UI, or something else).
-Part 3: Task Submission
-Submit code to Git repository and provide access to it
-Provide a working Django API that can be run locally, with appropriate instructions on how to set it up.
-Provide a React app that communicates with the API.
-The code for both the backend (Django) and frontend (React) can be within the same repository, but they must be runnable as separate apps (e.g., you should be able to start the backend and frontend independently).
-Include a README.md with setup instructions.
+## Backend Setup
+
+```bash
+cd backend
+pip install -r requirements.txt   # one-time only
+python -m uvicorn main:app --reload
+```
+
+The API will be available at `http://localhost:8000`.
+
+### API Endpoints
+
+| Method | Endpoint         | Description          |
+|--------|------------------|----------------------|
+| GET    | `/items/`        | List all items       |
+| POST   | `/items/`        | Create a new item    |
+| GET    | `/items/{id}/`   | Get a specific item  |
+| PATCH  | `/items/{id}/`   | Update an item       |
+
+Interactive API docs available at `http://localhost:8000/docs`.
+
+## Frontend Setup
+
+```bash
+cd frontend
+npm install   # one-time only
+npm run dev
+```
+
+The app will be available at `http://localhost:5173`.
+
+## Testing
+
+### Backend Tests
+
+```bash
+cd backend
+pytest
+```
+
+The backend uses **pytest** with **Hypothesis** for property-based testing of API validation and uniqueness constraints.
+
+### Frontend Tests
+
+```bash
+cd frontend
+npm test
+```
+
+The frontend uses **Vitest** with **React Testing Library** for component and integration tests.
+
+## Design Decisions
+
+- **FastAPI** over Django — lightweight, async-capable, automatic OpenAPI docs, and Pydantic validation built in
+- **SQLite** — zero-config local database, easily swappable for PostgreSQL
+- **React + TypeScript + Vite** — type safety, fast dev server, modern tooling
+- **Case-insensitive uniqueness** — item names are unique per group (case-insensitive, whitespace-trimmed)
+
+## Item Groups
+
+Items belong to one of two groups: **Primary** or **Secondary**. Each group enforces unique item names (case-insensitive).

@@ -77,51 +77,58 @@ export default function ItemForm(props: ItemFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      <h2>{isEdit ? "Edit Item" : "Create Item"}</h2>
+    <div className="page">
+      <form onSubmit={handleSubmit} noValidate className="form-container">
+        <h2>{isEdit ? "Edit Item" : "Create Item"}</h2>
 
-      <div>
-        <label htmlFor="item-name">Name</label>
-        <input
-          id="item-name"
-          type="text"
-          maxLength={255}
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-            if (validationError) setValidationError("");
-          }}
-          aria-describedby={validationError ? "name-error" : undefined}
-          aria-invalid={!!validationError}
-        />
-        {validationError && (
-          <p id="name-error" role="alert" style={{ color: "red" }}>
-            {validationError}
+        {apiError && (
+          <p role="alert" className="form-api-error">
+            {apiError}
           </p>
         )}
-      </div>
 
-      <div>
-        <label htmlFor="item-group">Group</label>
-        <select
-          id="item-group"
-          value={group}
-          onChange={(e) => setGroup(e.target.value as ItemGroup)}
-        >
-          <option value="Primary">Primary</option>
-          <option value="Secondary">Secondary</option>
-        </select>
-      </div>
+        <div className="form-group">
+          <label htmlFor="item-name">Name</label>
+          <input
+            id="item-name"
+            type="text"
+            maxLength={255}
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              if (validationError) setValidationError("");
+            }}
+            aria-describedby={validationError ? "name-error" : undefined}
+            aria-invalid={!!validationError}
+          />
+          {validationError && (
+            <p id="name-error" role="alert" className="form-error">
+              {validationError}
+            </p>
+          )}
+        </div>
 
-      {apiError && (
-        <p role="alert" style={{ color: "red" }}>
-          {apiError}
-        </p>
-      )}
+        <div className="form-group">
+          <label htmlFor="item-group">Group</label>
+          <select
+            id="item-group"
+            value={group}
+            onChange={(e) => setGroup(e.target.value as ItemGroup)}
+          >
+            <option value="Primary">Primary</option>
+            <option value="Secondary">Secondary</option>
+          </select>
+        </div>
 
-      <button type="submit" disabled={submitting}>
-        {submitting ? "Saving..." : isEdit ? "Update" : "Create"}
-      </button>
-    </form>
+        <div className="form-actions">
+          <button type="submit" disabled={submitting} className="btn btn-primary">
+            {submitting ? "Saving..." : isEdit ? "Update" : "Create"}
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate(-1)}>
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

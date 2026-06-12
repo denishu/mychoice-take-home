@@ -35,8 +35,10 @@ describe("ItemList", () => {
       expect(screen.getByText(/Rock/)).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/Rock — Primary/)).toBeInTheDocument();
-    expect(screen.getByText(/Paper — Secondary/)).toBeInTheDocument();
+    expect(screen.getByText("Rock")).toBeInTheDocument();
+    expect(screen.getByText("Primary")).toBeInTheDocument();
+    expect(screen.getByText("Paper")).toBeInTheDocument();
+    expect(screen.getByText("Secondary")).toBeInTheDocument();
   });
 
   it("shows empty state message when no items exist", async () => {
@@ -79,7 +81,7 @@ describe("ItemList", () => {
       expect(screen.getByText(/Scissors/)).toBeInTheDocument();
     });
 
-    const link = screen.getByRole("link", { name: /Scissors — Primary/ });
+    const link = screen.getByRole("link", { name: /Scissors/ });
     expect(link).toHaveAttribute("href", "/items/5");
   });
 
