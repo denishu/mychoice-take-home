@@ -15,9 +15,9 @@ class Item(Base):
 
     __table_args__ = (
         Index(
-            "unique_item_name_per_group",
-            func.lower(func.trim(name)),
-            "group",
-            unique=True,
+            "unique_item_name_per_group",  # name of the index
+            func.lower(func.trim(name)),   # uniqueness factor 1: normalized name
+            "group",                       # uniqueness factor 2: group
+            unique=True,                   # enforces the constraint
         ),
     )

@@ -107,21 +107,22 @@ def update_item(item_id: int, payload: ItemUpdate, db: Session = Depends(get_db)
     if not item:
         raise HTTPException(status_code=404, detail="Not found.")
 
+    # Convert payload to dict with only the fields the user actually sent
     update_data = payload.model_dump(exclude_unset=True)
     if not update_data:
-        return item
+        return item  # nothing to update, return item as-is
 
-    # Determine the new name and group for uniqueness check
+    # Build the "future state" for uniqueness check — use submitted value or fall back to current
     new_name = update_data.get("name", item.name)
     new_group = update_data.get("group", item.group)
-    if isinstance(new_group, ItemGroup):
+    if isinstance(new_group, ItemGroup):  # convert enum to string for DB comparison
         new_group = new_group.value
 
-    # Check uniqueness constraint for the new name+group combination
+    # Check uniqueness: same name+group combo can't exist (excluding this item itself)
     existing = db.query(Item).filter(
         func.lower(func.trim(Item.name)) == new_name.strip().lower(),
         Item.group == new_group,
-        Item.id != item_id,
+        Item.id != item_id,  # exclude self — renaming to same name is fine
     ).first()
     if existing:
         raise HTTPException(
@@ -129,11 +130,11 @@ def update_item(item_id: int, payload: ItemUpdate, db: Session = Depends(get_db)
             detail="An item with this name already exists in the specified group.",
         )
 
-    # Apply updates
+    # Apply each submitted field to the item object dynamically
     for field, value in update_data.items():
         if isinstance(value, ItemGroup):
-            value = value.value
-        setattr(item, field, value)
+            value = value.value  # enum → string for DB storage
+        setattr(item, field, value)  # equivalent to item.name = value, item.group = value
     item.updated_at = datetime.now(timezone.utc)
 
     db.commit()
