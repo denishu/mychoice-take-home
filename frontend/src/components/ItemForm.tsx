@@ -22,9 +22,11 @@ export default function ItemForm(props: ItemFormProps) {
   const isEdit = props.mode === "edit";
   const initialName = isEdit ? props.item.name : "";
   const initialGroup: ItemGroup = isEdit ? props.item.group : "Primary";
+  const initialAuthor = isEdit ? props.item.author : ""
 
   const [name, setName] = useState(initialName);
   const [group, setGroup] = useState<ItemGroup>(initialGroup);
+  const [author, setAuthor] = useState(initialAuthor);
   const [validationError, setValidationError] = useState("");
   const [apiError, setApiError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -44,8 +46,8 @@ export default function ItemForm(props: ItemFormProps) {
     setSubmitting(true);
 
     const submitAction = isEdit
-      ? updateItem(props.itemId, { name: trimmedName, group })
-      : createItem({ name: trimmedName, group });
+      ? updateItem(props.itemId, { name: trimmedName, group, author })
+      : createItem({ name: trimmedName, group, author });
 
     submitAction
       .then((item) => {
@@ -118,6 +120,27 @@ export default function ItemForm(props: ItemFormProps) {
             <option value="Primary">Primary</option>
             <option value="Secondary">Secondary</option>
           </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="item-author">Author</label>
+          <input
+            id="item-author"
+            type="text"
+            maxLength={50}
+            value={author}
+            onChange={(e) => {
+              setAuthor(e.target.value);
+              if (validationError) setValidationError("");
+            }}
+            aria-describedby={validationError ? "author-error" : undefined}
+            aria-invalid={!!validationError}
+          />
+          {validationError && (
+            <p id="author-error" role="alert" className="form-error">
+              {validationError}
+            </p>
+          )}
         </div>
 
         <div className="form-actions">

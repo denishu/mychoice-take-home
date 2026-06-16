@@ -84,6 +84,7 @@ def create_item(payload: ItemCreate, db: Session = Depends(get_db)):
         group=payload.group.value,
         created_at=now,
         updated_at=now,
+        author=payload.author
     )
     db.add(item)
     db.commit()

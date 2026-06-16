@@ -14,6 +14,7 @@ class ItemCreate(BaseModel):
     """Schema for POST /items/ — defines what a valid create request looks like."""
     name: str = Field(..., min_length=1, max_length=255)  # ... = required
     group: ItemGroup
+    author: str = Field(..., min_length=1, max_length=50)
 
     @field_validator("name")
     @classmethod
@@ -29,6 +30,7 @@ class ItemUpdate(BaseModel):
     """Schema for PATCH /items/{id}/ — both fields optional for partial updates."""
     name: Optional[str] = Field(None, max_length=255)  # None = not required
     group: Optional[ItemGroup] = None
+    author: Optional[str] = Field(None, max_length=50)
 
     @field_validator("name")
     @classmethod
@@ -49,5 +51,6 @@ class ItemResponse(BaseModel):
     group: str
     created_at: datetime
     updated_at: datetime
+    author: str
 
     model_config = {"from_attributes": True}  # read from ORM object attributes, not dict keys

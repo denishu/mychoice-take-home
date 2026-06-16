@@ -12,6 +12,7 @@ class Item(Base):
     group = Column(String(50), nullable=False)
     created_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc))
+    author = Column(String(50), nullable=False)
 
     __table_args__ = (
         Index(

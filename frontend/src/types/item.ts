@@ -6,14 +6,17 @@ export interface Item {
   group: ItemGroup;
   created_at: string;
   updated_at: string;
+  author: string;
 }
 
 export interface ItemCreate {
   name: string;
   group: ItemGroup;
+  author: string;
 }
 
 export interface ItemUpdate {
   name?: string;
   group?: ItemGroup;
+  author?: string;
 }
